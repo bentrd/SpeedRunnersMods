@@ -1,0 +1,9 @@
+* text=auto
+*.dll binary
+*.dylib binary
+*.exe binary
+*.ttf binary
+*.otf binary
+*.xnb binary
+*.zip binary
+*.icns binary

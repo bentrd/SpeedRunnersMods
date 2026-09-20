@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"><title>SpeedRunners Mods</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="toolbar"><span>SpeedRunners Mods</span></header>
+<main class="game-menu">
+ <div class="scene" aria-hidden="true"><img id="sky-art" alt=""><img id="city-art" alt=""></div>
+ <img id="game-logo" alt="SpeedRunners"><span id="art-fallback">SpeedRunners</span>
+ <nav class="menu" aria-label="Main menu">
+  <button id="launch-vanilla" class="menu-item selected" data-launch="vanilla">Launch Vanilla</button>
+  <button id="launch-velo" class="menu-item" data-launch="velo">Launch Velo</button>
+  <button id="settings" class="menu-item secondary-entry">Settings</button>
+  <button id="quit" class="menu-item small-entry">Quit</button>
+ </nav>
+ <p id="notice" role="status" aria-live="polite"></p>
+ <span id="port-version">Velo 2.4.40</span>
+</main>
+<dialog id="preferences"><div class="sheet-header"><h1>Settings</h1><button id="close-settings" class="quiet">Done</button></div>
+ <section><h2>SpeedRunners</h2><p class="path" id="game-path">Finding your Steam installation…</p><div class="actions"><button id="choose-game" class="secondary">Locate game…</button><button id="open-game" class="quiet">Show in Finder</button></div></section>
+ <section><h2>Velo <span>2.4.40</span></h2><p>The Mac port is included. Updates arrive with the launcher.</p><div class="actions"><button id="open-velo" class="secondary">Open Velo folder</button><button id="install" class="quiet">Reinstall</button></div><details><summary>Port details</summary><p>By rbit, olsu & doodlezucc. Press F1 in game for settings. Windows audio capture and verified leaderboard submissions aren’t supported.</p></details></section>
+ <section><h2>Launcher <span id="app-version"></span></h2><p id="update-status" hidden></p><div class="actions"><button id="check-update" class="secondary">Check for updates</button><button id="apply-update" class="primary" hidden>Update & restart</button><button id="open-log" class="quiet">Game log</button><button id="project" class="quiet">GitHub</button></div></section>
+ <p id="settings-notice" role="status" aria-live="polite"></p>
+</dialog><script src="app.js"></script></body></html>

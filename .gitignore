@@ -1,0 +1,7 @@
+.work/
+node_modules/
+dist/
+**/bin/
+**/obj/
+.DS_Store
+*.log

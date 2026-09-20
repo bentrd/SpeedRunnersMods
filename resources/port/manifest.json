@@ -1,0 +1,12 @@
+{
+  "version": "2.4.40",
+  "portVersion": 1,
+  "archiveSha256": "65df3986199294739e7f3a201cf544ca4ea178a469fdcba697a5e8456bc59c2e",
+  "files": [
+    "libVelo_UI.dylib",
+    "Velo.dll.config",
+    "System.Windows.Forms.dll",
+    "liblua54.dylib",
+    "KeraLua.dll.config"
+  ]
+}

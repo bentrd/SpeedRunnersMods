@@ -1,0 +1,2 @@
+const path=require('node:path');const {execFileSync}=require('node:child_process');
+exports.default=async context=>{if(context.electronPlatformName!=='darwin')return;const app=path.join(context.appOutDir,context.packager.appInfo.productFilename+'.app');execFileSync('/usr/bin/codesign',['--force','--deep','--sign','-','--entitlements',path.join(__dirname,'../build/entitlements.mac.plist'),app],{stdio:'inherit'});execFileSync('/usr/bin/codesign',['--verify','--deep','--strict',app],{stdio:'inherit'});};
