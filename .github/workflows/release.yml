@@ -28,7 +28,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          shasum -a 256 dist/*.zip dist/*.dmg > dist/SHA256SUMS.txt
+          (cd dist && shasum -a 256 *.zip *.dmg > SHA256SUMS.txt)
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             echo "Release already published; keeping its tested artifacts."
             exit 0

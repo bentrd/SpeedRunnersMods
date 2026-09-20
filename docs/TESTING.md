@@ -32,6 +32,13 @@ The game and native Velo libraries run as Intel code through Rosetta.
   verification passed. Installed the arm64 app into Applications and verified its
   bundled game menu, font, artwork, icon, Settings entry, and Quit behavior.
 
+- Updater integration passed against the public v0.1.0 GitHub release: downloaded
+  the real arm64 archive, verified its GitHub SHA-256 digest, bundle identity and
+  signature, replaced a version-0.0.0 test fixture, preserved its backup, and
+  visually verified the restarted app. This used a disposable fixture, not the
+  user’s installed app.
+- GitHub Actions completed the macOS build, unit checks, and tag-version check.
+
 ## Checks to reproduce
 
 ```sh
