@@ -12,8 +12,16 @@ installed Steam copy of SpeedRunners. Sign into Steam and choose Launch Velo. Th
 copy of your local game with the bundled, checksum-locked Mac fixes. No .NET SDK, Mono installation, Homebrew, or compiler is needed by users.
 The Intel game still uses Rosetta on Apple Silicon.
 
-This initial release is ad-hoc signed, not Apple-notarized. macOS may require
-allowing the downloaded app in System Settings → Privacy & Security.
+This initial release is ad-hoc signed, not Apple-notarized. If macOS blocks the
+app or reports that it is damaged, first move **SpeedRunners Mods.app** into
+**Applications**, then run this in Terminal:
+
+```sh
+xattr -dr com.apple.quarantine "/Applications/SpeedRunners Mods.app"
+```
+
+This removes the download quarantine attribute only from this app and its contents.
+Open the app again afterward.
 
 - **Vanilla** launches through Steam, honoring Steam launch options and cloud saves.
 - **Velo** launches the separate Mac port. F1 opens settings; F2 opens the leaderboard.
