@@ -70,7 +70,6 @@ for reproducible rebuilds and [TESTING.md](docs/TESTING.md) for the actual valid
 record. Tagging `v*` triggers macOS-only packaging. The app includes the pinned
 Velo mod archive and compatibility files; a full Steam game installation is still required.
 
-Inspired by [GambonanzaMods](https://github.com/bentrd/GambonanzaMods).
 Velo is by rbit, olsu, and doodlezucc. Its UI bridge is adapted from
 [andrewmenden/Velo_UI](https://github.com/andrewmenden/Velo_UI), pinned at
 `b19df4051f1f7a949c128e87b216431edd06f1e9`.
