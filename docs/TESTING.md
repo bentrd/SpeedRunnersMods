@@ -1,5 +1,28 @@
 # Validation record
 
+## 0.2.0 — 2 November 2026
+
+Tested on Apple M2 using Rosetta for the Intel game.
+
+- Reproduced the old launch path with no Steam overlay library mapped into Velo;
+  Shift+Tab did not open Steam. With the child-process injection fix, the Valve
+  overlay library was mapped and Shift+Tab visibly opened the Steam recording
+  library and friends overlay. The user also confirmed it worked.
+- Rebuilt the Velo 2.4.41 port from the pinned archive and inspected assembly.
+  The same 49 compatibility edits applied; native imports and native binaries
+  were unchanged. No gameplay, ranked, or verifier guard changes were added.
+- Installed 2.4.41/port revision 2 into the existing separate game installation.
+- Steam saved a new manual recording after launching Velo 2.4.41 with the fix.
+  The user confirmed recording worked. Both new captures were exported losslessly
+  to MP4 with H.264 video and stereo AAC; full decoding completed without errors
+  or warnings and packet timestamps were strictly increasing. Source fragments
+  were retained.
+- All 13 tests passed with the licensed-game integration test enabled, including
+  reinstall/data preservation, exact patch hashes, unchanged Steam game files,
+  live Steam discovery, architecture rejection/fallback, and environment merging.
+
+## 0.1.0 — 20 September 2026
+
 Tested on 20 September 2026, Apple M2, macOS, Steam SpeedRunners 207140.
 The game and native Velo libraries run as Intel code through Rosetta.
 

@@ -1,6 +1,6 @@
 # Rebuilding the Velo Mac port
 
-The launcher ships a single reviewed Velo 2.4.40 version. End users need only
+The launcher ships a single reviewed Velo 2.4.41 version. End users need only
 Steam's Mac SpeedRunners installation and Rosetta on Apple Silicon. They do not
 import arbitrary Windows mods. Velo's Windows updater is disabled; new versions
 must be ported, tested, and released with this app.
@@ -30,8 +30,8 @@ recorded in the Steam recipe and validated by the installer.
 
 ## Sources and recipes
 
-- Velo 2.4.40 archive SHA-256:
-  `65df3986199294739e7f3a201cf544ca4ea178a469fdcba697a5e8456bc59c2e`.
+- Velo 2.4.41 archive SHA-256:
+  `2a5f99d0dd725f0dec1adc9f371f297c55afd183068e3058c5066a70a5e126e5`.
 - UI: `andrewmenden/Velo_UI`, revision `b19df4051f1f7a949c128e87b216431edd06f1e9`.
   Its pinned submodules supply Dear ImGui and SDL headers; SDL itself comes from the game.
 - Lua 5.4.8: official lua.org source, SHA-256
@@ -74,6 +74,14 @@ Windows loopback audio is unavailable. The proprietary Windows leaderboard
 verifier is not replaced; installation disables automatic run submissions.
 
 ## Installation and future updates
+
+The launcher loads the running Steam client's own `gameoverlayrenderer.dylib`
+before the Velo child initializes OpenGL. It discovers Steam's installation and
+requires an Intel-compatible library while preserving existing library paths.
+Steam files and global settings are not modified; the overlay is not redistributed.
+SteamAPI initialization alone does not load this hook for a directly launched copy.
+The bundled manifest pins the archive filename/version used by installation and
+the displayed Velo version.
 
 The app validates the supplied bundled archive and recipes, clones the Steam game
 into a staging directory, applies the port, preserves the previous Velo data

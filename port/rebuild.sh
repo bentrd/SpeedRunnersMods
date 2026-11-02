@@ -1,12 +1,15 @@
 #!/bin/bash
-# Rebuild the fixed Velo 2.4.40 Mac port; never write to the Steam game.
+# Rebuild the pinned Velo Mac port; never write to the Steam game.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 GAME=${1:?Pass the unmodified Steam SpeedRunners.app path}
-ARCHIVE=${2:-resources/port/Velo_2.4.40.zip}
+VELO_VERSION=2.4.41
+PORT_VERSION=2
+ARCHIVE_SHA256=2a5f99d0dd725f0dec1adc9f371f297c55afd183068e3058c5066a70a5e126e5
+ARCHIVE=${2:-resources/port/Velo_${VELO_VERSION}.zip}
 GAME=$(cd "$GAME" && pwd)
 ARCHIVE=$(cd "$(dirname "$ARCHIVE")" && pwd)/$(basename "$ARCHIVE")
-printf '%s  %s\n' '65df3986199294739e7f3a201cf544ca4ea178a469fdcba697a5e8456bc59c2e' "$ARCHIVE" | shasum -a 256 -c -
+printf '%s  %s\n' "$ARCHIVE_SHA256" "$ARCHIVE" | shasum -a 256 -c -
 mkdir -p .work/velo-original resources/port
 unzip -oq "$ARCHIVE" -d .work/velo-original
 dotnet build tools/Inspector -o .work/inspector -v quiet
@@ -20,5 +23,5 @@ git -C .work/Velo_UI submodule update --init --recursive
 python3 port/prepare-native.py .work/Velo_UI
 bash port/build-native.sh "$GAME"
 bash port/build-lua.sh
-python3 port/make-recipes.py "$GAME" "$ARCHIVE"
+python3 port/make-recipes.py "$GAME" "$ARCHIVE" "$VELO_VERSION" "$PORT_VERSION"
 printf 'Port rebuilt in resources/port. Run npm test before packaging.\n'

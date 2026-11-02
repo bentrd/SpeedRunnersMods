@@ -3,6 +3,10 @@
 from pathlib import Path
 import hashlib,json,base64,sys,shutil
 root=Path(__file__).resolve().parent.parent;work=root/'.work';out=root/'resources/port';game=Path(sys.argv[1]);zipfile=Path(sys.argv[2])
+version=sys.argv[3];port_version=int(sys.argv[4]);archive_name=f'Velo_{version}.zip'
+metadata=json.loads((work/'velo-il.json').read_text())
+version_method=next(m for m in metadata['methods'] if m['type']=='Velo.Version' and m['name']=='.cctor')
+assert version_method['instructions'][2]['operand']==version,'Inspected Velo version does not match the pinned rebuild version'
 hash=lambda b:hashlib.sha256(b).hexdigest()
 a=(game/'Contents/Resources/Steamworks.NET.dll').read_bytes();b=(work/'Steamworks.NET.dll').read_bytes()
 size=32;index={a[i:i+size]:i for i in range(0,len(a)-size+1)};ops=[];pos=0;literal=bytearray()
@@ -17,5 +21,5 @@ while pos<len(b):
 flush()
 (out/'steam-patch.json').write_text(json.dumps(dict(sourceSha256=hash(a),outputSha256=hash(b),blocks=ops)))
 shutil.copy(work/'Velo.dll.patches.json',out/'velo-patch.json')
-shutil.copy(zipfile,out/'Velo_2.4.40.zip') if zipfile.resolve()!=(out/'Velo_2.4.40.zip').resolve() else None
-(out/'manifest.json').write_text(json.dumps(dict(version='2.4.40',portVersion=1,archiveSha256=hash(zipfile.read_bytes()),files=['libVelo_UI.dylib','Velo.dll.config','System.Windows.Forms.dll','liblua54.dylib','KeraLua.dll.config']),indent=2))
+shutil.copy(zipfile,out/archive_name) if zipfile.resolve()!=(out/archive_name).resolve() else None
+(out/'manifest.json').write_text(json.dumps(dict(version=version,portVersion=port_version,archiveFile=archive_name,archiveSha256=hash(zipfile.read_bytes()),files=['libVelo_UI.dylib','Velo.dll.config','System.Windows.Forms.dll','liblua54.dylib','KeraLua.dll.config']),indent=2)+'\n')

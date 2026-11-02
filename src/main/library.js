@@ -7,6 +7,7 @@ const {promisify}=require('node:util');
 const exec=promisify(execFile);
 const Zip=require('adm-zip');
 const {hash,applyPatch,validateEntries}=require('./patches');
+const {discoverSteamRuntime,buildSteamEnvironment}=require('./steam');
 const APPID='207140';
 const defaultSteam=path.join(os.homedir(),'Library/Application Support/Steam');
 const exists=async p=>fs.access(p).then(()=>true,()=>false);
@@ -25,15 +26,16 @@ class Library {
  get veloApp(){return path.join(this.root,'installations/velo/SpeedRunners.app');}
  get logPath(){return path.join(this.root,'logs/game.log');}
  async running(){if(this.process||Date.now()<this.launchPendingUntil)return true;try{await exec('/usr/bin/pgrep',['-x','SpeedRunners']);return true;}catch{return false;}}
- async state(){const velo=await this.readJSON('installations/velo/install.json',null);const manifest=JSON.parse(await fs.readFile(path.join(this.port,'manifest.json'),'utf8'));return {gamePath:this.config.gamePath,gameFound:await validGame(this.config.gamePath),velo,needsPortUpdate:!!velo&&(velo.portVersion!==manifest.portVersion||velo.version!==manifest.version),running:await this.running(),session:this.session,busy:this.busy,error:this.error,root:this.root};}
+ async state(){const velo=await this.readJSON('installations/velo/install.json',null);const manifest=JSON.parse(await fs.readFile(path.join(this.port,'manifest.json'),'utf8'));return {gamePath:this.config.gamePath,gameFound:await validGame(this.config.gamePath),velo,bundledVeloVersion:manifest.version,needsPortUpdate:!!velo&&(velo.portVersion!==manifest.portVersion||velo.version!==manifest.version),running:await this.running(),session:this.session,busy:this.busy,error:this.error,root:this.root};}
  async chooseGame(p){if(this.busy||await this.running())throw new Error('Quit SpeedRunners before changing the game location.');if(!await validGame(p))throw new Error('Choose the SpeedRunners.app installed by Steam.');this.config.gamePath=p;await this.save();return this.state();}
- async install(zipPath=path.join(this.port,'Velo_2.4.40.zip')){
+ async install(zipPath){
   if(this.busy)throw new Error('An installation is already in progress.');
   if(await this.running())throw new Error('Quit SpeedRunners before installing Velo.');
   if(!await validGame(this.config.gamePath))throw new Error('Locate your Steam copy of SpeedRunners first.');
   this.busy=true;this.error=null;let stage;
   try {
    const manifest=JSON.parse(await fs.readFile(path.join(this.port,'manifest.json'),'utf8'));
+   zipPath=zipPath||path.join(this.port,manifest.archiveFile);
    this.notify('Checking Velo archive…');const bytes=await fs.readFile(zipPath);
    if(hash(bytes)!==manifest.archiveSha256)throw new Error('The included Velo archive failed its integrity check. Reinstall the launcher.');
    const zip=new Zip(bytes);validateEntries(zip.getEntries());
@@ -66,7 +68,7 @@ class Library {
    let submissions=general.Value.find(s=>s.Name==='disable submissions');
    if(submissions)submissions.Value=true;else general.Value.push({Name:'disable submissions',Value:true});
    await fs.writeFile(lb,JSON.stringify(settings,null,2));
-   const record={version:'2.4.40',portVersion:manifest.portVersion,installedAt:new Date().toISOString(),sourceGame:this.config.gamePath,archiveSha256:manifest.archiveSha256};
+   const record={version:manifest.version,portVersion:manifest.portVersion,installedAt:new Date().toISOString(),sourceGame:this.config.gamePath,archiveSha256:manifest.archiveSha256};
    await fs.writeFile(path.join(stage,'install.json'),JSON.stringify(record,null,2));
    const target=path.dirname(this.veloApp),backup=target+'.previous';
    await fs.rm(backup,{recursive:true,force:true});
@@ -87,10 +89,13 @@ class Library {
   if(!await exists(path.join(path.dirname(this.veloApp),'install.json')))throw new Error('Install Velo first.');
   // Steam must already be signed in; launching Steam alone is not proof of readiness.
   try{await exec('/usr/bin/pgrep',['-x','steam_osx']);}catch{await exec('/usr/bin/open',['-a','Steam']);throw new Error('Steam is opening. Wait until it is signed in, then launch Velo again.');}
+  const steam=await discoverSteamRuntime();
   const res=path.join(this.veloApp,'Contents/Resources');await fs.mkdir(path.dirname(this.logPath),{recursive:true});
+  const env=buildSteamEnvironment(process.env,{overlayPath:steam.overlayPath,resPath:res,macOSPath:path.join(this.veloApp,'Contents/MacOS/osx'),appId:APPID});
   const log=await fs.open(this.logPath,'w');
   try{
-   const child=spawn(path.join(this.veloApp,'Contents/MacOS/SpeedRunners'),['opengl'],{cwd:res,env:{...process.env,SteamAppId:APPID,SteamGameId:APPID,FNA3D_FORCE_DRIVER:'OpenGL',DYLD_LIBRARY_PATH:`${res}:${path.join(this.veloApp,'Contents/MacOS/osx')}`},stdio:['ignore',log.fd,log.fd],detached:true});
+   await log.write(`[Launcher] Steam overlay: ${steam.overlayPath}\n`);
+   const child=spawn(path.join(this.veloApp,'Contents/MacOS/SpeedRunners'),['opengl'],{cwd:res,env,stdio:['ignore',log.fd,log.fd],detached:true});
    this.process=child;this.session='velo';
    child.on('error',e=>{this.error=e.message;this.process=null;this.notify('Launch failed.');});
    child.on('exit',code=>{this.process=null;this.session=null;if(code)this.error=`Velo exited with code ${code}. Open the game log for details.`;this.notify(code?'Velo stopped unexpectedly.':'Game closed.');});

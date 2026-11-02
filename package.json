@@ -1,7 +1,7 @@
 {
   "name": "speedrunners-mods",
   "productName": "SpeedRunners Mods",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A native-feeling macOS launcher for SpeedRunners and Velo.",
   "author": "bentrd",
   "license": "MIT",

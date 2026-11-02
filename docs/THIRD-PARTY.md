@@ -1,7 +1,7 @@
 # Third-party components
 
 - **SpeedRunners**: DoubleDutch Games / tinyBuild. The full game and menu textures and font are read from the user's installation. The app icon uses the game's icon.
-- **Velo 2.4.40**: rbit, olsu, doodlezucc. The pinned upstream mod ZIP is
+- **Velo 2.4.41**: rbit, olsu, doodlezucc. The pinned upstream mod ZIP is
   included with the launcher and receives the reviewed Mac compatibility patches.
   The original mod remains the work of its authors; it is not relicensed as MIT.
 - **Velo_UI**: andrewmenden/Velo_UI at b19df4051f1f7a949c128e87b216431edd06f1e9.

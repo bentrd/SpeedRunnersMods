@@ -7,6 +7,8 @@ function render(){
  if(!state)return;const installed=!!state.velo,busy=working||state.busy;
  $('#game-path').textContent=state.gamePath||'Choose your Steam copy of SpeedRunners.app.';
  $('#app-version').textContent=state.appVersion;
+ $('#port-version').textContent=`Velo ${state.bundledVeloVersion}`;
+ $('#velo-version').textContent=state.bundledVeloVersion;
  document.querySelectorAll('[data-launch]').forEach(b=>{const mode=b.dataset.launch;b.disabled=busy||state.running;b.textContent=busy&&selectedMode===mode?'Preparing…':state.running&&state.session===mode?'Running…':!state.gameFound?'Locate SpeedRunners':mode==='velo'?'Launch Velo':'Launch Vanilla';});
  $('#install').disabled=busy||state.running;$('#install').hidden=!installed;
  $('#open-velo').disabled=!installed;$('#open-game').disabled=!state.gameFound;$('#choose-game').disabled=busy||state.running;

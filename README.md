@@ -1,6 +1,6 @@
 # SpeedRunners Mods for Mac
 
-A small Electron launcher for **vanilla SpeedRunners** and **Velo 2.4.40**.
+A small Electron launcher for **vanilla SpeedRunners** and **Velo 2.4.41**.
 Choose Launch Vanilla or Launch Velo. Velo lives in a separate installation; Steam's
 original game is never patched. No general-purpose mod framework.
 
@@ -25,6 +25,10 @@ Open the app again afterward.
 
 - **Vanilla** launches through Steam, honoring Steam launch options and cloud saves.
 - **Velo** launches the separate Mac port. F1 opens settings; F2 opens the leaderboard.
+- **Steam overlay and recording** work in Velo through Steam's installed overlay.
+  Press Shift+Tab for recording controls. Manual recording requires starting and
+  stopping a capture; instant clips require background recording. If Steam's clip
+  shortcut is F1, change it in Steam to keep Velo's F1 settings key.
 - **Settings** locates the game, opens the Velo folder and logs, and checks for updates.
 - The menu uses the actual game background, logo, and font, decoded from your local
   Steam installation. Missing artwork falls back to the game name.

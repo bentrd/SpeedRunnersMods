@@ -1,7 +1,8 @@
 {
-  "version": "2.4.40",
-  "portVersion": 1,
-  "archiveSha256": "65df3986199294739e7f3a201cf544ca4ea178a469fdcba697a5e8456bc59c2e",
+  "version": "2.4.41",
+  "portVersion": 2,
+  "archiveFile": "Velo_2.4.41.zip",
+  "archiveSha256": "2a5f99d0dd725f0dec1adc9f371f297c55afd183068e3058c5066a70a5e126e5",
   "files": [
     "libVelo_UI.dylib",
     "Velo.dll.config",
